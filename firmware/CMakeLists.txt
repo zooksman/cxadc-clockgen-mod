@@ -4,6 +4,9 @@
 
 cmake_minimum_required(VERSION 3.5)
 
+# Supress compiler error complaining about cmake version
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCMAKE_POLICY_VERSION_MINIMUM=3.5")
+
 set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
 
 # Pull in SDK (must be before project)
