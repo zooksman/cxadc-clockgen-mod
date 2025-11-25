@@ -16,7 +16,12 @@ endforeach()
 
 target_include_directories(firmware PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 
-
+# Because we are changing Pico core clock speed, peripheral clock needs to be allowed to change with it
+# This fixes broken UART output (incorrect baud rate)
+# https://forums.raspberrypi.com/viewtopic.php?p=2287750#p2287750
+target_compile_definitions( firmware PRIVATE 
+PICO_CLOCK_AJDUST_PERI_CLOCK_WITH_SYS_CLOCK=1
+)
 
 target_link_libraries(firmware PRIVATE pico_stdlib pico_multicore pico_unique_id hardware_i2c hardware_uart hardware_pio tinyusb_device tinyusb_board)
 
