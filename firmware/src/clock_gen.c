@@ -13,11 +13,14 @@
 
 bool clock_gen_init()
 {
-    // slightly underclock the pico at 120 MHz
-    set_sys_clock_khz(120000, true);
     gpio_set_dir(CLOCK_PIN, true);
-    // output 120/3 = 40 MHz
-    clock_gpio_init_int_frac(CLOCK_PIN, CLOCKS_CLK_GPOUT0_CTRL_AUXSRC_VALUE_CLK_SYS, 3, 0);
+    //set_sys_clock_khz(120000, true);
+    // Rather than underclock the pico, slightly overclock to 160MHz (up to 200Mhz is officially supported)
+    set_sys_clock_khz(160000, true);
+    
+    // Then, divide by 4 instead of 3 to achieve an even 40MHz
+    //clock_gpio_init_int_frac(CLOCK_PIN, CLOCKS_CLK_GPOUT0_CTRL_AUXSRC_VALUE_CLK_SYS, 3, 0);
+    clock_gpio_init_int_frac(CLOCK_PIN, CLOCKS_CLK_GPOUT0_CTRL_AUXSRC_VALUE_CLK_SYS, 4, 0);
     return true;
 }
 
