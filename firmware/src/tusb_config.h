@@ -85,7 +85,7 @@ extern "C" {
 #define CFG_TUD_AUDIO_FUNC_1_N_CHANNELS_TX                            USB_AUDIO_CHANNELS   // This value is not required by the driver, it parses this information from the descriptor once the alternate interface is set by the host - we use it for the setup
 #define CFG_TUD_AUDIO_EP_SZ_IN                                        (USB_AUDIO_SAMPLES_PER_BUFFER + 1) * CFG_TUD_AUDIO_FUNC_1_N_BYTES_PER_SAMPLE_TX * CFG_TUD_AUDIO_FUNC_1_N_CHANNELS_TX      // xx Samples (48 kHz) x 2 Bytes/Sample x CFG_TUD_AUDIO_N_CHANNELS_TX Channels - the Windows driver always needs an extra sample per channel of space more, otherwise it complains... found by trial and error
 #define CFG_TUD_AUDIO_FUNC_1_EP_IN_SZ_MAX                             CFG_TUD_AUDIO_EP_SZ_IN
-#define CFG_TUD_AUDIO_FUNC_1_EP_IN_SW_BUF_SZ                          CFG_TUD_AUDIO_EP_SZ_IN
+#define CFG_TUD_AUDIO_FUNC_1_EP_IN_SW_BUF_SZ                          CFG_TUD_AUDIO_EP_SZ_IN*8 // TinyUSB examples show a buffer size much larger than endpoint size
 #define CFG_TUD_AUDIO_ENABLE_TYPE_I_ENCODING                          1
 
 #ifdef __cplusplus

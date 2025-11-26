@@ -1,3 +1,5 @@
+_deps
+pico_flash_region.ld
 **/*.swp
 **/*.kate-swp
 **/*.orig
