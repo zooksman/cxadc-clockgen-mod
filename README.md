@@ -4,10 +4,12 @@ This is a fork of namazso's modification of Rene Wolf's CXADC Clock Generator + 
 
 Compared to namazso's version, this firmware makes just a few changes:
 1. **Rather than undeclocking the Pico to 120MHz and dividing by 3 to produce a 40MHz clock, this version overclocks to 160MHz and divides the clock by 4 instead.**
-- **Why?** Based on testing with an oscilloscope, the division by 3 results in a relatively slow rise time of 2ns and introduces clock jitter. In comparison, dividing by 4 produces a clock with a faster rise time of 1.2ns and reduced jitter.
+- **Why?** Based on testing with an oscilloscope, the division by 3 results in a relatively slow rise time around 2ms and introduces clock jitter. In comparison, dividing by 4 produces a clock with a faster rise time of <1ms and reduced jitter.
+- The Pi Pico is officially supported to run at clock speeds up to 200MHz. 
 2. **Increases the drive strength of the GPIO clock pin (GPIO21) from 4ma to 8ma** (Note: this is not the maximum current the pin can drive, rather, it is the maximum current draw at which the output voltage remains stable)
 - **Why?** Driving multiple sources with the clock induces excessive capacitive load, causing clock jitter. Without this modification, the clock can completely fail to drive 2 CX cards + PCM1802 with longer cable lengths. In my case, without this mod, I could not use a cable any longer than 6 inches; with it, up to 18 inches of cable works OK. 
 - Lower clock jitter and faster rise times results in higher SNR from the CX card ADCs, and reduces drift/desync between the two CX cards and the PCM1802.
+- This does cause some additional overshooting in the clock signal, however, and may not be necessary for very short clock lines. 
 3. **Fixes broken UART debug output caused by modified Pico sys clock**
 4. **Updates TinyUSB version from 0.15.0 to 0.17.0** (*Note: TinyUSB 0.18 and later does not work for this project with i/o and device busy errors when attempting to record audio*)
 
@@ -26,7 +28,7 @@ There are several changes that make this possible:
 
 - The PCM1802 is configured in 512 division mode. This allows us to directly use a 40 MHz clock with it, while producing 78125 Hz sample rate recordings.
 - USB configuration was edited to allow enough buffer for the higher sample rate recording, as well as remove alternative clocks.
-- The Pi Pico is underclocked to 120 MHz. This allows a simple divisor for getting 40 MHz, without fractionals which introduce jitter.
+- The Pi Pico is overclocked to 160 MHz. This allows a simple divisor for getting 40 MHz, without fractionals which introduce jitter.
 - The RP2040 has a feature where you can output divided clocks on a certain set of GPIO pins. Using this, we output 40 MHz on GPIO 21.
 
 ## Shared build guide for any setup
