@@ -15,16 +15,17 @@
 bool clock_gen_init()
 {
     gpio_set_dir(CLOCK_PIN, true);
+        
+    // To help keep a stable clock on longer lines, increase GPIO drive strength  to 8ma
+    gpio_set_drive_strength(CLOCK_PIN, GPIO_DRIVE_STRENGTH_8MA);
+    
     //set_sys_clock_khz(120000, true);
     // Rather than underclock the pico, slightly overclock to 160MHz (up to 200Mhz is officially supported)
     set_sys_clock_khz(160000, true);
     
-    // To help keep a stable clock on longer lines, increase GPIO drive strength from 4ma to 8ma
-    //gpio_set_drive_strength(CLOCK_PIN, GPIO_DRIVE_STRENGTH_8MA);
-    
     // Then, divide by 4 instead of 3 to achieve an even 40MHz
-    //clock_gpio_init_int_frac(CLOCK_PIN, CLOCKS_CLK_GPOUT0_CTRL_AUXSRC_VALUE_CLK_SYS, 3, 0);
-    clock_gpio_init_int_frac(CLOCK_PIN, CLOCKS_CLK_GPOUT0_CTRL_AUXSRC_VALUE_CLK_SYS, 4, 0);
+    clock_gpio_init(CLOCK_PIN, CLOCKS_CLK_GPOUT0_CTRL_AUXSRC_VALUE_CLK_SYS, 4);
+    
     return true;
 }
 
